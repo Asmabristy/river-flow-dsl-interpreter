@@ -1,0 +1,36 @@
+
+// Root Rivers
+
+river A = [3 ~ 6] @ 30 + [2 ~ 3] @ 10;
+river B = [4 ~ 7] @ 28 + [1 ~ 2] @ 8;
+river C = (A + B);
+
+// Dam Functions
+
+// Pass-through dam: releases all inflow unchanged
+fun dam_trivial(inflow) {
+  return inflow;
+}
+
+// Always-full dam: outputs a constant maximum flow
+fun dam_always_full(inflow) {
+  return [5 ~ 5] @ 20;
+}
+
+
+// Dam Applications
+
+// Dam1 regulates river C (passes flow directly)
+river Dam1 = dam_trivial <- C;
+
+// Dam2 simulates a constant outflow from B
+river Dam2 = dam_always_full <- B;
+
+
+// Downstream Rivers
+
+// Combine both dam outputs into D
+river D = (Dam1 + Dam2);
+
+// Final Output
+D;

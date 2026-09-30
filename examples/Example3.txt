@@ -1,0 +1,52 @@
+
+// Root Rivers
+
+river A = [3 ~ 6] @ 30 + [2 ~ 3] @ 10;
+river B = [4 ~ 7] @ 28 + [1 ~ 2] @ 8;
+river C = (A + B);
+
+
+// Dam Functions
+
+// Pass-through dam: releases all inflow unchanged
+fun dam_trivial(inflow) {
+  return inflow;
+}
+
+// Always-full dam: outputs a constant maximum flow
+fun dam_always_full(inflow) {
+  return [5 ~ 5] @ 20;
+}
+
+// Smart dam: adjusts flow depending on its level
+fun dam_smart(inflow) {
+  if (level(dam_smart) > 100) {
+    // Too full – double the outflow to flush excess water
+    return inflow + inflow;
+  }
+  if (level(dam_smart) < 2) {
+    // Almost empty – stop all flow
+    return [0 ~ 0] @ 0;
+  } else {
+    // Normal operation – release steady environmental flow
+    return [1 ~ 3] @ 10;
+  }
+}
+
+
+// Dam1 regulates river C
+river Dam1 = dam_trivial <- C;
+
+// Dam2 regulates Dam1 output with smart control
+river Dam2 = dam_smart <- Dam1;
+
+// Dam3 simulates an always-open environmental bypass
+river Dam3 = dam_always_full <- B;
+
+
+// Combine the outflows from Dam2 and Dam3
+river D = (Dam2 + Dam3);
+
+
+// Final Output
+D;

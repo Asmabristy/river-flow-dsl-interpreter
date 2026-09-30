@@ -1,0 +1,23 @@
+// Root rivers
+river A = [3 ~ 6] @ 30 + [2 ~ 3] @ 10;
+river B = [4 ~ 7] @ 28 + [1 ~ 2] @ 8;
+
+// C is the combination of A and B
+river C = (A + B);
+
+// Define dam function (pass-through dam)
+// This dam simply passes all inflow directly
+
+fun dam1(inflow) {
+  return inflow;
+}
+
+// Apply the dam to the combined river C
+river Dam1 = dam1 <- C;
+
+// D is the final output river from the dam
+river D = Dam1;
+
+// Output final river
+D;
+
